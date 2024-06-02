@@ -1,0 +1,155 @@
+(footprint "M"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 3 -6.5 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "6181b8f3-0c33-4627-b3ef-04f0dddaa080")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "M"
+		(at 3 -5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "4cbf46de-aff3-4bf6-943a-06457f6be4bc")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 3 -6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7a6ed884-d8cd-4168-9e4b-0f08c0b50274")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 3 -6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "27e57073-ac4e-400a-a110-16229c5cb851")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 3 -6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "de2f5f02-eac6-416e-a344-ec4cf8971d62")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -7 -4)
+		(end -7 4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "cf565c6a-1578-4e13-ba1a-8f5319f6a7c7")
+	)
+	(fp_line
+		(start -7 4)
+		(end 7 4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "762f09e0-b25a-45a7-95c0-839463423aff")
+	)
+	(fp_line
+		(start 7 -4)
+		(end -7 -4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "1eab85bb-4fcd-430d-b0fc-d9de926e246f")
+	)
+	(fp_line
+		(start 7 4)
+		(end 7 -4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "104f7382-aa75-43fc-bd53-0255582665a0")
+	)
+	(fp_circle
+		(center -3.5 0)
+		(end -2 0)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill none)
+		(layer "Edge.Cuts")
+		(uuid "a31dc3b9-ca89-46aa-97fe-7777ffb3a164")
+	)
+	(fp_circle
+		(center 3.5 0)
+		(end 2 0)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill none)
+		(layer "Edge.Cuts")
+		(uuid "ab86a2ec-731e-49c6-989d-cf283724682a")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 3 -3.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "aa52e85e-1dc5-4c62-9f08-4e4319ffe952")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(model "C:/Users/Perico/Desktop/Mouse/Mouse-pcb.step"
+		(offset
+			(xyz 31 -5 -2)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

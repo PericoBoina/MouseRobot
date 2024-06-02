@@ -1,0 +1,12 @@
+Enlaces :
+- https://en.wikipedia.org/wiki/Differential_wheeled_robot // Documentacion
+
+- https://drive.google.com/file/d/1HS-5pF-UFEItbylbGvAekCrKYQvqzdeI/view //Ejemplo Arduino Odometria
+
+- https://github.com/alfa934/wheel-odometry-arduino/blob/main/krtmi_odometry.ino // Ejemplo ArDuino Odometria
+  
+- http://micromouseusa.com/?page_id=1342
+
+- https://github.com/idt12312/MIZUHO.git --> repo japo! 😁😁//
+
+https://youtube.com/shorts/J72pE9Ghk50?si=G8V3c-wjg9_S6Kjb

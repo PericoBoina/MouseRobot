@@ -1,0 +1,134 @@
+#include <esp_now.h>
+#include <WiFi.h>
+#include "analogWrite.h"
+#include "math.h"
+#define pulsos 871
+
+TaskHandle_t Task1;
+
+int A=0;
+int B=0;
+int C=0;
+int D=0;
+int lastA=0;
+int lastB=0;
+int lastC=0;
+int lastD=0;
+int cd=0;   //contador pulsos llanta derecha
+int ci=0;   //contador pulsos llanta izquierda
+int cd1=0;  //muestra anterior de contador pulsos llanta derecha
+int ci1=0;  //muestra anterior de contador pulsos llanta izquierda
+
+//variables del RMD
+float x=0;
+float y=0;
+float xh=0;
+float yh=0;
+float phi=0;
+float R=0.0165;
+float L=0.092;
+float h=0.065;
+
+float deltaRd=0; //Desplazamiento de llanta derecha
+float deltaRi=0; //Desplazamiento de llanta izquierda
+
+float t=0.003; //tiempo en milisegundos para una Fs aprox de X Hz
+
+void setup() {
+  xTaskCreatePinnedToCore(
+    loop1,
+    "Task_1",
+    10000, 
+    NULL,
+    1,
+    &Task1,
+    0);
+  Serial.begin(115200); 
+  //variables del ecoder
+  pinMode(25,INPUT);
+  pinMode(26,INPUT);
+  pinMode(34,INPUT);
+  pinMode(35,INPUT);
+}
+
+
+//########################## ODOMETRIA ##########################
+void odometria(){
+  deltaRd= 2*PI*(cd - cd1)*R/pulsos; // Desplazamiento de rueda derecha
+  cd1=cd;                            // actualización de variable anterior
+  deltaRi= 2*PI*(ci - ci1)*R/pulsos; // Desplazamiento de rueda izquierda
+  ci1=ci;                            // actualización de variable anterior
+ 
+  x= x + cos(phi)*(deltaRd + deltaRi)/2; // calculo de xc
+  y= y + sin(phi)*(deltaRd + deltaRi)/2; // calculo de yc
+  
+  phi= phi + (deltaRd-deltaRi)/L;    // calculo de angulo
+  
+  //----> NOTA: los delta de tiempo desaparecen pues
+  //      se cancelan al sustuir la ecuacuiones <---
+  }
+
+//############### LECTURA DE ENCODER (nucelo 0) #################
+void loop() {  
+  A=digitalRead(25);// lectura de fase 
+  B=digitalRead(26);// lectura de fase
+  C=digitalRead(34);// lectura de fase
+  D=digitalRead(35);// lectura de fase
+  
+  if (lastA==0&&lastB==0){
+    if (A==0&&B==1)ci++;
+    else if (A==1&&B==0)ci--;}
+    
+    else if (lastA==0&&lastB==1){
+    if (A==1&&B==1)ci++;
+    else if (A==0&&B==0)ci--;}
+
+    else if (lastA==1&&lastB==1){
+    if (A==1&&B==0)ci++;
+    else if (A==0&&B==1)ci--;}
+    
+  else if (lastA==1&&lastB==0){
+    if (A==0&&B==0)ci++;
+    else if (A==1&&B==1)ci--;}
+  //----------------------------
+    if (lastC==0&&lastD==0)
+  {
+    if (C==0&&D==1)cd--;
+    else if (C==1&&D==0)cd++;
+  }
+    else if (lastC==0&&lastD==1)
+  {
+    if (C==1&&D==1)cd--;
+    else if (C==0&&D==0)cd++;
+  }
+
+    else if (lastC==1&&lastD==1)
+  {
+    if (C==1&&D==0)cd--;
+    else if (C==0&&D==1)cd++;
+  }
+  
+  else if (lastC==1&&lastD==0)
+  {
+    if (C==0&&D==0)cd--;
+    else if (C==1&&D==1)cd++;
+  }
+  
+  lastA=A;// actualización de variable anterior
+  lastB=B;// actualización de variable anterior
+  lastC=C;// actualización de variable anterior
+  lastD=D;// actualización de variable anterior
+}
+
+//************************************ TAREA DE NUCLEO 1 ***************************
+void loop1(void *parameter){    
+  for(;;){
+     //Imprimer en puerto serial las posiciones y angulo
+    Serial.println("x_c=  "+String(100*x) +";   y_c=  "+String(100*y)+";   phi=  "+String(phi*180/3.14159));
+    // Mandamos a llamar la función de odomatría
+    odometria();  
+    // delay de 3 milisengundos;
+    delay(t*1000);
+    }
+  vTaskDelay(5);
+  }
