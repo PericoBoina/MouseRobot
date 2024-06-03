@@ -1,25 +1,32 @@
 
 #include <Arduino.h>
 #include "Motion/Motion.h"
+#include "Sensors/Sensor.h"
 
-Motion::Motion(Encoders &encoder, MotorController &motor)
-    : enc(encoder), motor(motor), baseSpeed(baseSpeed), integral(0), lastError(0)
+Motion::Motion()
 {
 }
 
 void Motion::Straight()
 {
-    float diferencia_pasos = enc.getCount(1) - enc.getCount(2);
-    float error = diferencia_pasos;
-    float derivative = error - lastError;
+    float values[4];
+    sensor.update(values);
+    float Z = values[3];
+    float setpoint = 0; 
+    float Kp = 2.780;     
+    float Ki = 0.001;     
+    float Kd = 0.05;    
+    float error = setpoint - Z;
+    float P = Kp * error;
     integral += error;
-    float KP = 0.801;
-    float KI = 0.00012;
-    float KD = 2.375;
-    float controlSignal = KP * error + KI * integral + KD * derivative;
-    int motorSpeedA = baseSpeed - controlSignal;
-    int motorSpeedB = baseSpeed + controlSignal;
-    motor.M1_FWD(motorSpeedA);
-    motor.M2_FWD(motorSpeedB);
+    float I = Ki * integral;
+    float derivative = error - lastError;
+    float D = Kd * derivative;
+    float output = P + I + D;
     lastError = error;
+    int leftSpeed = SpeedBase + output;
+    int rightSpeed = SpeedBase - output;
+     motor.M1_BKC(leftSpeed);
+    motor.M2_BKC(rightSpeed);
+  
 }

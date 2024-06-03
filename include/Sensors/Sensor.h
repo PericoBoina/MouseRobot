@@ -8,8 +8,6 @@
 
 #define NUM_READINGS 10
 #define DIST_THRESHOLD 125
-
-#define ofsetGyro 9.58
 #define NUM_SAMPLES 15 
 
 class Sensor
@@ -18,14 +16,9 @@ class Sensor
 public:
     Sensor();
     void init();
+    void update(float sensorValues[]);
     void raw_distances();
-    int left();
-    int center();
-    int right();
     int wall();
-    float angleZ();
-    void resetAngleZ();
-
 
 private:
     VL53L0X sensor[3];
@@ -37,16 +30,9 @@ private:
     int leftReadings[NUM_READINGS];
     int centerReadings[NUM_READINGS];
     int rightReadings[NUM_READINGS];
-    int  leftIndex;
+    int leftIndex;
     int centerIndex;
     int rightIndex;
-    unsigned long lastUpdateTime;
-    const int numLecturas = 10;
-    const uint16_t delayTime = 10;
-    float promedio = 0;
-    float gyroReadings[NUM_SAMPLES] = {0};
-    float angle = 0.0;
-    float correction = 0.0; // Valor de corrección
 };
 
 #endif

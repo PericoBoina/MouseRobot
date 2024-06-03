@@ -10,12 +10,8 @@ Programacion:
 
 ---- Sensor library:
          * algoritmo lectura paredes  -> 👍​👍
-         * Calcular ofset del gyro para poder hacer que aranque a 0 -> aqui hay que afinar 👍 
-         * giroscopio -> angulo corregido y sin deriva -> 👍​👍 
+         * mpu6050 hacer que aranque a 0 ->  😵‍💫
          * meter valor gyro z + inicio + ofset en libreria sensors -> 👍​👍
-         * ajuste auto del ofset del angulo z -> 😵‍💫
-         * funcion para resetear gyro cuando quiera -> 🙈🙈
-         * meter funcion para que deje de leer el giro cuando quiera -> 😵‍💫​😵‍💫 
         
 ---- Importante sino no se puede avanzar!!
         *averiguar que valor dan los getCount de los encoder en 1 milimetro --> 😡

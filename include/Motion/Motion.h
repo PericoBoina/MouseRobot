@@ -2,22 +2,24 @@
 #define MOTION_H
 
 #include <Arduino.h>
-#include "Sensors/Encoders.h" 
-#include "Motion/MotorController.h" 
+#include "Sensors/Encoders.h"
+#include "Motion/MotorController.h"
+#include "Sensors/Sensor.h"
 
-class Motion {
+#define SpeedBase 140
+
+class Motion
+{
 public:
-    Motion(Encoders &encoder, MotorController &motor);
+    Motion();
     void Straight();
 
-
 private:
-    Encoders &enc;
-    MotorController &motor;
-    int baseSpeed;
+    Encoders enc;
+    MotorController motor;
+    Sensor sensor;
     float integral;
     float lastError;
-
 };
 
-#endif 
+#endif

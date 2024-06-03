@@ -17,11 +17,11 @@ public:
     void all_Stop();
 
 private:
-    const int motorA1 = 17;
-    const int motorA2 = 16;
+    const int motorA1 = 16;
+    const int motorA2 = 17;
     const int motorAPwm = 12;
-    const int motorB1 = 19;
-    const int motorB2 = 18;
+    const int motorB1 = 18;
+    const int motorB2 = 19;
     const int motorBPwm = 13;
     const int ledChannel0 = 0;
     const int ledChannel1 = 1;

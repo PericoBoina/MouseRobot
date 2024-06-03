@@ -2,9 +2,10 @@
 #include "Wire.h"
 #include "Add/Led.h"
 
-
 Sensor::Sensor() : mux(0x70), leftIndex(0), centerIndex(0), rightIndex(0),
-                   lastUpdateTime(0), mpu(Wire) {}
+                   mpu(Wire) {}
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 void Sensor::init()
 {
@@ -23,54 +24,73 @@ void Sensor::init()
         sensor[i].startContinuous();
     }
     mux.selectChannel(3);
-    mpu.begin();
-    mpu.calcGyroOffsets();
-    for (int i = 0; i < NUM_SAMPLES; i++)
+    byte status = mpu.begin();
+    Serial.print(F("MPU6050 status: "));
+    Serial.println(status);
+    while (status != 0)
     {
-        gyroReadings[i] = mpu.getAngleZ();
+    }
+    Serial.println(F("Calculating offsets, do not move MPU6050"));
+    delay(1000);
+    mpu.calcOffsets();
+    Serial.println("Done!\n");
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+void Sensor::update(float sensorValues[])
+{
+    float d[4]; // Almacena los valores temporales
+    for (int i = 0; i < 4; ++i)
+    {
+        switch (i)
+        {
+        case 0:
+            mux.selectChannel(1);
+            d[0] = sensor[1].readRangeContinuousMillimeters();
+            break;
+        case 1:
+            mux.selectChannel(2);
+            d[1] = sensor[2].readRangeContinuousMillimeters();
+            break;
+        case 2:
+            mux.selectChannel(0);
+            d[2] = sensor[0].readRangeContinuousMillimeters();
+            break;
+        case 3:
+            mux.selectChannel(3);
+            mpu.update();
+            d[3] = mpu.getAngleZ();
+            break;
+        }
+    }
+    for (int i = 0; i < 4; ++i)
+    {
+        sensorValues[i] = d[i];
     }
 }
-//////////////////////////////////////////// MPU6050 ////////////////////////////////////////////
 
-float Sensor::angleZ() {
-    mux.selectChannel(3);
-    mpu.update();
-    for (int i = 0; i < NUM_SAMPLES - 1; i++) {
-        gyroReadings[i] = gyroReadings[i + 1];
-    }
-    gyroReadings[NUM_SAMPLES - 1] = mpu.getAngleZ();
-    float sum = 0;
-    for (int i = 0; i < NUM_SAMPLES; i++) {
-        sum += gyroReadings[i];
-    }
-    float average = sum / NUM_SAMPLES;
-    angle = average - correction; 
-    return angle;
-}
+/*
+    ----- Example -----
 
-void Sensor::resetAngleZ()
-{
-}
-
-////////////////////////////////////// VL53L0X Sensors ///////////////////////////////////////////
-
-int Sensor::left()
-{
-    mux.selectChannel(1);
-    return sensor[1].readRangeContinuousMillimeters();
-}
-
-int Sensor::center()
-{
-    mux.selectChannel(2);
-    return sensor[2].readRangeContinuousMillimeters();
-}
-
-int Sensor::right()
-{
-    mux.selectChannel(0);
-    return sensor[0].readRangeContinuousMillimeters();
-}
+  float sensorValues[4];
+  sensor.update(sensorValues);
+  float D1 = sensorValues[0];
+  float D2 = sensorValues[1];
+  float D3 = sensorValues[2];
+  float Az = sensorValues[3];
+  Serial.print("D1:");
+  Serial.print(D1);
+  Serial.print(" -- ");
+  Serial.print("D2:");
+  Serial.print(D2);
+  Serial.print(" -- ");
+  Serial.print("D3:");
+  Serial.print(D3);
+  Serial.print(" -- ");
+  Serial.print("Z:");
+  Serial.println(Az);
+*/
 
 //////////////////////////////////////// Lectura paredes ///////////////////////////////////////
 
@@ -86,9 +106,14 @@ int Sensor::right()
 
 int Sensor::wall()
 {
-    int leftDistance = left();
-    int centerDistance = center();
-    int rightDistance = right();
+    float sensorValues[4];
+    update(sensorValues);
+    float D1 = sensorValues[0];
+    float D2 = sensorValues[1];
+    float D3 = sensorValues[2];
+    int leftDistance = D1;
+    int centerDistance = D2;
+    int rightDistance = D3;
     updateReadings(leftDistance, centerDistance, rightDistance);
     return createState();
 }
